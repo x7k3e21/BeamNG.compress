@@ -3,6 +3,7 @@ import os
 import os.path
 
 import sys
+import errno
 
 import zipfile
 
@@ -18,6 +19,16 @@ BEAMNG_LEVELS_PATH = BEAMNG_CONTENT_PATH + "levels/"
 BEAMNG_VEHICLES_PATH = BEAMNG_CONTENT_PATH + "vehicles/"
 
 BEAMNG_COMPRESSION_LIST = [BEAMNG_LEVELS_PATH, BEAMNG_VEHICLES_PATH]
+
+BEAMNG_REQUIRED_SPACE = 15 * (2 ** 20)
+
+def checkAvailableSpace():
+    diskFreeSpace = shutil.disk_usage()["free"]
+
+    if diskFreeSpace < BEAMNG_REQUIRED_SPACE:
+        raise OSError("Not enough space left on a device") 
+    else:
+        return True
 
 def compress(folderPath):
     os.chdir(folderPath)
@@ -44,6 +55,6 @@ def compress(folderPath):
         shutil.rmtree(filename[:-4])
 
 if __name__ == "__main__":
-    for folderPath in BEAMNG_COMPRESSION_LIST:
-        compress(folderPath)
+    #for folderPath in BEAMNG_COMPRESSION_LIST:
+    #    compress(folderPath)
 
