@@ -2,25 +2,14 @@
 import os
 import os.path
 
-import sys
-import errno
+def prepareGamePaths(mainDirPath):
+    global BEAMNG_CONTENT_PATH
+    BEAMNG_CONTENT_PATH = os.path.join(mainDirPath, "content")
 
-import zipfile
-
-import tqdm
-
-import shutil
-
-BEAMNG_PATH = "/home/x7k3e21/.games/BeamNG.drive Linux/game/content/vehicles/"
-
-BEAMNG_CONTENT_PATH = BEAMNG_PATH + "content/"
-
-BEAMNG_LEVELS_PATH = BEAMNG_CONTENT_PATH + "levels/"
-BEAMNG_VEHICLES_PATH = BEAMNG_CONTENT_PATH + "vehicles/"
-
-BEAMNG_COMPRESSION_LIST = [BEAMNG_LEVELS_PATH, BEAMNG_VEHICLES_PATH]
-
-BEAMNG_REQUIRED_SPACE = 15 * (2 ** 20)
+    global BEAMNG_LEVELS_PATH
+    BEAMNG_LEVELS_PATH = os.path.join(BEAMNG_CONTENT_PATH, "levels")
+    global BEAMNG_VEHICLES_PATH
+    BEAMNG_VEHICLES_PATH = os.path.join(BEAMNG_CONTENT_PATH, "vehicles")
 
 def validateDirectory(targetDir):
     if not os.path.isdir(targetDir):
@@ -28,13 +17,22 @@ def validateDirectory(targetDir):
     else:
         return True
 
+import errno
+
 def checkAvailableSpace(targetDir, freeSpaceThreshold):
+    validateDirectory(targetDir)
+
     diskFreeSpace = shutil.disk_usage(targetDir)["free"]
 
     if diskFreeSpace < freeSpaceThreshold:
         raise OSError(os.strerror(errno.ENOSPC))
     else:
         return True
+
+import shutil
+import zipfile
+
+import tqdm
 
 def compress(folderPath):
     os.chdir(folderPath)
@@ -61,8 +59,5 @@ def compress(folderPath):
         shutil.rmtree(filename[:-4])
 
 if __name__ == "__main__":
-    validateDirectory(BEAMNG_PATH)
-        
-    #for folderPath in BEAMNG_COMPRESSION_LIST:
-    #    compress(folderPath)
+    pass
 
