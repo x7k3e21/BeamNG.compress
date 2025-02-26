@@ -52,7 +52,7 @@ def compress(folderPath):
                     continue
 
                 zipFile.extractall(filename[:-4])
-        except zipfile.BadZipFile:
+        except:
             if os.path.isdir(os.path.join(os.getcwd(), filename[:-4])):
                 shutil.rmtree(filename[:-4])
 
@@ -75,7 +75,11 @@ if __name__ == "__main__":
 
     checkAvailableSpace(BEAMNG_TARGET_PATH, 10 * (2 ** 10))
 
-    compressionDirs = [BEAMNG_LEVELS_PATH, BEAMNG_LEVELS_PATH]
+    compressionDirs = [
+        BEAMNG_CONTENT_PATH, 
+        BEAMNG_LEVELS_PATH, 
+        BEAMNG_LEVELS_PATH
+    ]
 
     for folderPath in compressionDirs:
         compress(folderPath)
