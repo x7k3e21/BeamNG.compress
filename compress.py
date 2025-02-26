@@ -37,17 +37,24 @@ import tqdm
 def compress(folderPath):
     os.chdir(folderPath)
 
+    checkAvailableSpace(folderPath, 15 * (2 ** 10))
+
     folderContents = list()
 
     for filename in sorted(os.listdir(os.getcwd())):
         if filename.endswith(".zip"):
             folderContents.append(filename)
     
-    for filename in (pbar:=tqdm.tqdm(folderContents)):
-        pbar.set_postfix_str(filename)
+    for filename in (progressBar:=tqdm.tqdm(folderContents)):
+        progressBar.set_postfix_str(filename)
 
-        with zipfile.ZipFile(filename, mode="r") as zipFile:
-            zipFile.extractall(filename[:-4])
+        try:
+            with zipfile.ZipFile(filename, mode="r") as zipFile:
+                zipFile.extractall(filename[:-4])
+        except zipfile.BadZipFile:
+            shutil.rmtree(filename[:-4])
+
+            continue
 
         os.remove(filename)
 
@@ -59,5 +66,13 @@ def compress(folderPath):
         shutil.rmtree(filename[:-4])
 
 if __name__ == "__main__":
-    pass
+    BEAMNG_TARGET_PATH = str(input("Enter path to folder where BeamNG.drive is installed: "))
+
+    validateDirectory(BEAMNG_TARGET_PATH)
+    prepareGamePaths(BEAMNG_TARGET_PATH)
+
+    compressionDirs = [BEAMNG_LEVELS_PATH, BEAMNG_LEVELS_PATH]
+
+    for folderPath in compressionDirs:
+        compress(folderPath)
 
