@@ -22,7 +22,7 @@ import errno
 def checkAvailableSpace(targetDir, freeSpaceThreshold):
     validateDirectory(targetDir)
 
-    diskFreeSpace = shutil.disk_usage(targetDir)["free"]
+    diskFreeSpace = shutil.disk_usage(targetDir).free
 
     if diskFreeSpace < freeSpaceThreshold:
         raise OSError(os.strerror(errno.ENOSPC))
@@ -50,9 +50,13 @@ def compress(folderPath):
 
         try:
             with zipfile.ZipFile(filename, mode="r") as zipFile:
+                if zipFile.infolist()[0].compress_type != 0:
+                    continue
+
                 zipFile.extractall(filename[:-4])
         except zipfile.BadZipFile:
-            shutil.rmtree(filename[:-4])
+            if os.path.isdir(os.path.join(os.getcwd(), filename[:-4])):
+                shutil.rmtree(filename[:-4])
 
             continue
 
