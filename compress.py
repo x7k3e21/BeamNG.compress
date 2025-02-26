@@ -37,8 +37,6 @@ import tqdm
 def compress(folderPath):
     os.chdir(folderPath)
 
-    checkAvailableSpace(folderPath, 15 * (2 ** 10))
-
     folderContents = list()
 
     for filename in sorted(os.listdir(os.getcwd())):
@@ -74,6 +72,8 @@ if __name__ == "__main__":
 
     validateDirectory(BEAMNG_TARGET_PATH)
     prepareGamePaths(BEAMNG_TARGET_PATH)
+
+    checkAvailableSpace(BEAMNG_TARGET_PATH, 10 * (2 ** 10))
 
     compressionDirs = [BEAMNG_LEVELS_PATH, BEAMNG_LEVELS_PATH]
 
