@@ -8,11 +8,11 @@ If you want to, you can download the script itself and run it from anywhere. Alt
 ```bash
 git clone https://github.com/x7k3e21/BeamNG.compress
 ```
-2. Create a virtual environment (optional)
+2. Create a virtual environment _(optional)_
 ```bash
 python -m venv ./path/to/venv
 ```
-3. Install dependencies (optional)
+3. Install dependencies _(optional)_
 ```bash
 # Without using venv
 pip install -r requirements.txt
@@ -30,7 +30,7 @@ python compress.py
 ```
 
 ## Usage
-You need to simply run the script and then enter the path to a directory where your BeamNG.drive was installed. Execution may take a significant amount of time, especially on low-end machines.
+You need to simply run the script and then enter the path to a directory where your BeamNG.drive was installed. Execution may take a **significant amount** of time, especially on low-end machines.
 
 ## License
 This project is licensed under the GNU General Public License v3.0.
