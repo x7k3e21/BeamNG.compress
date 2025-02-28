@@ -32,7 +32,24 @@ def checkAvailableSpace(targetDir, freeSpaceThreshold):
 import shutil
 import zipfile
 
-import tqdm
+import warnings
+
+import sys
+
+TQDM_INSTALLED = True
+
+try:
+    import tqdm
+except ImportError:
+    TQDM_INSTALLED = False
+
+    warnings.warn("Failed to import \033[1mtqdm\033[0m.")
+
+    userCheck = str(input("Proceed without it? [Y/n] "))
+    userCheck = userCheck.lower()
+
+    if userCheck[0] != "y":
+        sys.exit()
 
 def compress(folderPath):
     os.chdir(folderPath)
@@ -42,9 +59,15 @@ def compress(folderPath):
     for filename in sorted(os.listdir(os.getcwd())):
         if filename.endswith(".zip"):
             folderContents.append(filename)
-    
-    for filename in (progressBar:=tqdm.tqdm(folderContents)):
-        progressBar.set_postfix_str(filename)
+
+    if TQDM_INSTALLED == True:
+        progressBar = tqdm.tqdm(folderContents)
+    else:
+        progressBar = folderContents
+
+    for filename in progressBar:
+        if TQDM_INSTALLED == True:
+            progressBar.set_postfix_str(filename)
 
         try:
             with zipfile.ZipFile(filename, mode="r") as zipFile:
